@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Pixel Embedder</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <img src="icons/icon48.png" alt="Logo" class="logo-icon">
+                <h1>Pixel Embedder</h1>
+            </div>
+            <div class="status-indicator" id="connectionStatus">
+                <div class="status-dot"></div>
+                <span>Checking...</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab Navigation -->
+            <nav class="tab-nav">
+                <button class="tab-btn active" data-tab="embed">Embed</button>
+                <button class="tab-btn" data-tab="resume">Resume</button>
+                <button class="tab-btn" data-tab="validate">Validate</button>
+                <button class="tab-btn" data-tab="history">History</button>
+            </nav>
+
+            <!-- Embed Tab -->
+            <div class="tab-content active" id="embed-tab">
+                <!-- Image Upload -->
+                <section class="section">
+                    <label class="section-title">Image Upload</label>
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <div class="upload-icon">📁</div>
+                            <p>Click to select image</p>
+                            <small>PNG, JPG, JPEG supported</small>
+                        </div>
+                        <input type="file" id="imageInput" accept=".png,.jpg,.jpeg" hidden>
+                    </div>
+                    <div class="image-preview" id="imagePreview" style="display: none;">
+                        <img id="previewImg" alt="Preview">
+                        <div class="image-info">
+                            <span id="imageSize"></span>
+                            <button class="btn-secondary small" id="removeImage">Remove</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Coordinates -->
+                <section class="section">
+                    <label class="section-title">Position</label>
+                    <div class="coordinates-grid">
+                        <div class="input-group">
+                            <label>X Position</label>
+                            <input type="number" id="startX" value="100" min="0" max="2999">
+                        </div>
+                        <div class="input-group">
+                            <label>Y Position</label>
+                            <input type="number" id="startY" value="100" min="0" max="1999">
+                        </div>
+                        <div class="input-group">
+                            <label>Max Width</label>
+                            <input type="number" id="maxWidth" value="100" min="10" max="500">
+                        </div>
+                        <button class="btn-secondary" id="centerBtn">Center</button>
+                    </div>
+                </section>
+
+                <!-- Credits & Estimation -->
+                <section class="section">
+                    <div class="credits-info">
+                        <div class="credits-display">
+                            <span class="credits-label">Credits:</span>
+                            <span class="credits-value" id="creditsDisplay">-</span>
+                        </div>
+                        <div class="estimation" id="estimation" style="display: none;">
+                            <div class="est-item">
+                                <span>Pixels:</span>
+                                <span id="pixelCount">-</span>
+                            </div>
+                            <div class="est-item">
+                                <span>Time:</span>
+                                <span id="timeEstimate">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Start Button -->
+                <button class="btn-primary large" id="startEmbedding" disabled>
+                    <span class="btn-text">Start Embedding</span>
+                    <div class="btn-loading" style="display: none;">
+                        <div class="loading-spinner"></div>
+                        <span>Processing...</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Resume Tab -->
+            <div class="tab-content" id="resume-tab">
+                <div class="resume-content" id="resumeContent">
+                    <div class="no-session" id="noSession">
+                        <div class="empty-icon">🔄</div>
+                        <h3>No Session Found</h3>
+                        <p>No resumable embedding session detected</p>
+                    </div>
+                    
+                    <div class="session-info" id="sessionInfo" style="display: none;">
+                        <h3>Resumable Session</h3>
+                        <div class="session-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Completed:</span>
+                                <span class="stat-value" id="completedPixels">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Remaining:</span>
+                                <span class="stat-value" id="remainingPixels">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Errors:</span>
+                                <span class="stat-value" id="errorCount">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Last Active:</span>
+                                <span class="stat-value" id="lastActive">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="resume-options">
+                            <label class="mode-option">
+                                <input type="radio" name="resumeMode" value="continue" checked>
+                                <div class="mode-card small">
+                                    <div class="mode-info">
+                                        <h4>Continue Only</h4>
+                                        <p>Resume with remaining pixels</p>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="resumeMode" value="validate">
+                                <div class="mode-card small">
+                                    <div class="mode-info">
+                                        <h4>Validate & Recover</h4>
+                                        <p>Check for missing pixels (recommended)</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="resume-actions">
+                            <button class="btn-primary" id="resumeBtn">Resume Session</button>
+                            <button class="btn-secondary" id="clearSessionBtn">Clear Session</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validate Tab -->
+            <div class="tab-content" id="validate-tab">
+                <div class="validate-content">
+                    <div class="validate-info">
+                        <h3>Image Validation</h3>
+                        <p>Check if your embedded image has any missing pixels and recover them automatically.</p>
+                    </div>
+                    
+                    <div class="validate-requirements">
+                        <h4>Requirements:</h4>
+                        <ul>
+                            <li>Must have a saved session with original image data</li>
+                            <li>Can only validate previously embedded images</li>
+                            <li>Validation will check every pixel of your original image</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="validate-status" id="validateStatus">
+                        <div class="status-message" id="validateMessage">
+                            Ready to validate
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" id="validateBtn">Validate Image</button>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="history-tab">
+                <div class="history-content">
+                    <div class="history-header">
+                        <h3>Embedding History</h3>
+                        <button class="btn-secondary small" id="clearHistoryBtn">Clear All</button>
+                    </div>
+                    
+                    <div class="history-list" id="historyList">
+                        <div class="no-history" id="noHistory">
+                            <div class="empty-icon">📋</div>
+                            <h4>No History Found</h4>
+                            <p>Your embedding history will appear here after you complete embeddings</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Progress Section -->
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-header">
+                <h3>Embedding Progress</h3>
+                <button class="btn-secondary small" id="stopBtn">Stop</button>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat">
+                    <span class="stat-label">Placed:</span>
+                    <span class="stat-value" id="placedCount">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Rate:</span>
+                    <span class="stat-value" id="placementRate">0/min</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Errors:</span>
+                    <span class="stat-value" id="errorCountProgress">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Credits:</span>
+                    <span class="stat-value" id="creditsRemaining">-</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-info">
+                <span>Speed: 150 pixels/min</span>
+                <span>•</span>
+                <span>Auto-save enabled</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

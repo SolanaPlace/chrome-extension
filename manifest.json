@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Solana Place Pixel Embedder",
+  "version": "1.0.0",
+  "description": "Embed pixel art on Solana Place with advanced features and resume capabilities",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "*://solanaplace.fun/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Solana Place Pixel Embedder"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://solanaplace.fun/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": ["*://solanaplace.fun/*"]
+    }
+  ]
+}
