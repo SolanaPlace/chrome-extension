@@ -6,31 +6,31 @@ A Chrome extension that automates pixel art embedding on Solana Place with advan
 
 ## Features
 
-### ?? **Smart Image Embedding**
+### 🎨 **Smart Image Embedding**
 - Upload PNG, JPG, or JPEG images and automatically convert them to pixel art
 - Intelligent image scaling with customizable max width (10-500px)
 - Position control with X/Y coordinates or auto-centering
 - Real-time pixel count estimation and time calculation
 
-### ? **Optimized Performance**
+### ⚡ **Optimized Performance**
 - **150 pixels per minute** safe placement rate
 - Intelligent burst protection and rate limiting
 - Universal 400ms delays for maximum safety across all account tiers
 - Automatic credit detection and insufficient credit warnings
 
-### ?? **Session Management**
+### 🔄 **Session Management**
 - **Auto-save progress** - never lose your work
 - Resume interrupted embeddings from where you left off
 - Session validation to recover missing pixels
 - 24-hour session persistence with automatic cleanup
 
-### ?? **Advanced Monitoring**
+### 📊 **Advanced Monitoring**
 - Real-time progress tracking with visual progress bar
 - Live statistics: pixels placed, errors, rate, credits remaining
 - Comprehensive embedding history with completion rates
 - Connection status monitoring across multiple tabs
 
-### ??? **Safety Features**
+### 🛡️ **Safety Features**
 - Burst limit protection (15 pixels per 10-second window)
 - Rate limit detection and automatic recovery
 - Credit monitoring with insufficient credit warnings
@@ -214,11 +214,11 @@ If you want to modify the extension:
 ### Debug Information
 
 Enable debug logging by opening browser console (F12) while using the extension. Look for messages prefixed with:
-- `??` - Initialization
-- `?` - Success operations  
-- `?` - Errors
-- `??` - Progress updates
-- `??` - Storage operations
+- `🚀` - Initialization
+- `✅` - Success operations  
+- `❌` - Errors
+- `🔄` - Progress updates
+- `💾` - Storage operations
 
 ## Privacy and Security
 
@@ -257,4 +257,4 @@ This extension is provided as-is for educational and personal use. Use responsib
 
 ---
 
-**?? Important**: Always use this extension responsibly and in accordance with Solana Place's terms of service. The extension implements conservative rate limiting to ensure fair usage, but ultimate responsibility lies with the user.
+**⚠️ Important**: Always use this extension responsibly and in accordance with Solana Place's terms of service. The extension implements conservative rate limiting to ensure fair usage, but ultimate responsibility lies with the user.
